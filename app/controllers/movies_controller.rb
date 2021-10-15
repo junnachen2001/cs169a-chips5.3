@@ -10,18 +10,21 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings
     @ratings_to_show = Movie.all_ratings
     @sort_by = params[:sort_by] || session[:sort_by]
+    session[:sort_by] = @sort_by
     if @sort_by == "title"
       @title_header = "hilite bg-warning"
     end
     if @sort_by == "release_date"
       @release_date_header = "hilite bg-warning"
     end
-    if not params[:ratings]
+    @ratings_hash = params[:ratings] || session[:ratings]
+    if @ratings_hash.nil?
       @ratings_to_show = @all_ratings
     else
-      @ratings_to_show = params[:ratings].keys
-      @movies = Movie.with_ratings_and_sorted_by(@ratings_to_show, @sort_by)
+      @ratings_to_show = @ratings_hash.keys
     end
+    session[:ratings] = @ratings_to_show
+    @movies = Movie.with_ratings_and_sorted_by(@ratings_to_show, @sort_by)
   end
 
   def new
