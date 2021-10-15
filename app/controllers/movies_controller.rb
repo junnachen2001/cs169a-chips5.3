@@ -23,7 +23,7 @@ class MoviesController < ApplicationController
     else
       @ratings_to_show = @ratings_hash.keys
     end
-    session[:ratings] = @ratings_to_show
+    session[:ratings] = @ratings_hash
     @movies = Movie.with_ratings_and_sorted_by(@ratings_to_show, @sort_by)
   end
 
